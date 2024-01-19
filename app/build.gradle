@@ -13,6 +13,10 @@ android {
     namespace 'com.endeavorsheep.comiclibrary'
     compileSdk 34
 
+    buildFeatures {
+        buildConfig true
+    }
+
     defaultConfig {
         applicationId "com.endeavorsheep.comiclibrary"
         minSdk 24
