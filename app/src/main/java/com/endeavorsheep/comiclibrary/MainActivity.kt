@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.endeavorsheep.comiclibrary.ui.theme.ComicLibraryTheme
+import com.endeavorsheep.comiclibrary.view.CharactersBottomNav
 import com.endeavorsheep.comiclibrary.view.CollectionScreen
 import com.endeavorsheep.comiclibrary.view.LibraryScreen
 
@@ -51,7 +52,7 @@ fun CharactersScaffold(navController: NavHostController) {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        bottomBar = {}
+        bottomBar = { CharactersBottomNav(navController = navController) }
     ) { paddingValues ->
         NavHost(navController = navController, startDestination = Destination.Library.route) {
             composable(Destination.Library.route) {
