@@ -3,6 +3,7 @@ package com.endeavorsheep.comiclibrary
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -10,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +20,8 @@ import com.endeavorsheep.comiclibrary.ui.theme.ComicLibraryTheme
 import com.endeavorsheep.comiclibrary.view.CharactersBottomNav
 import com.endeavorsheep.comiclibrary.view.CollectionScreen
 import com.endeavorsheep.comiclibrary.view.LibraryScreen
+import com.endeavorsheep.comiclibrary.viewmodel.LibraryApiViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 sealed class Destination(val route: String) {
     object Library : Destination("library")
@@ -27,7 +31,11 @@ sealed class Destination(val route: String) {
     }
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val lvm by viewModels<LibraryApiViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -39,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //Project
                     val navController = rememberNavController()
-                    CharactersScaffold(navController = navController)
+                    CharactersScaffold(navController = navController, lvm)
                 }
             }
         }
@@ -47,7 +55,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CharactersScaffold(navController: NavHostController) {
+fun CharactersScaffold(navController: NavHostController, lvm: LibraryApiViewModel) {
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
@@ -56,7 +64,7 @@ fun CharactersScaffold(navController: NavHostController) {
     ) { paddingValues ->
         NavHost(navController = navController, startDestination = Destination.Library.route) {
             composable(Destination.Library.route) {
-                LibraryScreen()
+                LibraryScreen(navController, lvm, paddingValues)
             }
             composable(Destination.Collection.route) {
                 CollectionScreen()

@@ -16,12 +16,12 @@ object ApiService {
     private fun getRetrofit(): Retrofit {
         val ts = System.currentTimeMillis().toString()
         val apiSecret = BuildConfig.MARVEL_SECRET
-        val apiKey = BuildConfig.MARVEL_API
+        val apiKey = BuildConfig.MARVEL_KEY
         val hash = getHash(ts, apiSecret, apiKey)
 
         val clientInterceptor = Interceptor { chain ->
             var request: Request = chain.request()
-            var url: HttpUrl =
+            val url: HttpUrl =
                 request.url.newBuilder()
                     .addQueryParameter("ts", ts)
                     .addQueryParameter("apiKey", apiKey)

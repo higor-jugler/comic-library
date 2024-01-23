@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MarvelApi {
-    @GET
+    @GET("characters")
     fun getCharacters(@Query("nameStartsWith") name: String): Call<CharactersApiResponse>
 }
