@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiService {
-    private const val BASE_URL = "http://gateway.marvel.com/V1/public/"
+    private const val BASE_URL = "http://gateway.marvel.com/v1/public/"
 
     private fun getRetrofit(): Retrofit {
         val ts = System.currentTimeMillis().toString()
@@ -24,7 +24,7 @@ object ApiService {
             val url: HttpUrl =
                 request.url.newBuilder()
                     .addQueryParameter("ts", ts)
-                    .addQueryParameter("apiKey", apiKey)
+                    .addQueryParameter("apikey", apiKey)
                     .addQueryParameter("hash", hash)
                     .build()
             request = request.newBuilder().url(url).build()
