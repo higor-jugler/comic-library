@@ -43,4 +43,8 @@ class LibraryApiViewModel @Inject constructor(
         queryInput.trySend(input)
     }
 
+    fun retrieveSingleCharacter(id: Int) {
+        repo.getSingleCharacter(id)
+    }
+
 }

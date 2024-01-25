@@ -11,8 +11,8 @@ import coil.compose.AsyncImage
 import java.math.BigInteger
 import java.security.MessageDigest
 
-fun getHash(timeStamp: String, privateKey: String, publicKey: String): String {
-    val hashStr = timeStamp + privateKey + publicKey
+fun getHash(timesStamp: String, privateKey: String, publicKey: String): String {
+    val hashStr = timesStamp + privateKey + publicKey
     val md = MessageDigest.getInstance("MD5")
     return BigInteger(
         1, md.digest(

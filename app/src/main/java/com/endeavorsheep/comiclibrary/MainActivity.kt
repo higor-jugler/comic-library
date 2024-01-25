@@ -1,6 +1,7 @@
 package com.endeavorsheep.comiclibrary
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -11,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.endeavorsheep.comiclibrary.ui.theme.ComicLibraryTheme
 import com.endeavorsheep.comiclibrary.view.CharactersBottomNav
+import com.endeavorsheep.comiclibrary.view.CharactersDetailScreen
 import com.endeavorsheep.comiclibrary.view.CollectionScreen
 import com.endeavorsheep.comiclibrary.view.LibraryScreen
 import com.endeavorsheep.comiclibrary.viewmodel.LibraryApiViewModel
@@ -57,7 +60,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CharactersScaffold(navController: NavHostController, lvm: LibraryApiViewModel) {
     val scaffoldState = rememberScaffoldState()
-
+    val ctx = LocalContext.current
     Scaffold(
         scaffoldState = scaffoldState,
         bottomBar = { CharactersBottomNav(navController = navController) }
@@ -70,6 +73,13 @@ fun CharactersScaffold(navController: NavHostController, lvm: LibraryApiViewMode
                 CollectionScreen()
             }
             composable(Destination.CharacterDetail.route) { navBackStackEntry ->
+                val id = navBackStackEntry.arguments?.getString("characterId")?.toIntOrNull()
+                if (id == null)
+                    Toast.makeText(ctx, "Character id is required", Toast.LENGTH_SHORT).show()
+                else {
+                    lvm.retrieveSingleCharacter(id)
+                    CharactersDetailScreen()
+                }
             }
         }
     }

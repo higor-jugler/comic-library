@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -26,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -48,17 +51,20 @@ fun LibraryScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(),
+            .padding(bottom = paddingValues.calculateBottomPadding()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
             value = text.value,
-            onValueChange = vm::onQueryUpdate
+            onValueChange = vm::onQueryUpdate,
+            label = { Text(text = "Character search") },
+            placeholder = { Text(text = "Character") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -95,12 +101,12 @@ fun ShowCharactersList(
             result.data.attributionText?.let {
                 item { AttributionText(text = it) }
             }
-            items(characters) { characters ->
-                val imageUrl = characters.thumbnail?.path + "." + characters.thumbnail?.extension
-                val title = characters.name
-                val description = characters.description
+            items(characters) { character ->
+                val imageUrl = character.thumbnail?.path + "." + character.thumbnail?.extension
+                val title = character.name
+                val description = character.description
                 val context = LocalContext.current
-                val id = characters.id
+                val id = character.id
 
                 Column(
                     modifier = Modifier
@@ -111,7 +117,7 @@ fun ShowCharactersList(
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .clickable {
-                            if (characters.id != null)
+                            if (character.id != null)
                                 navController.navigate(Destination.CharacterDetail.createRoute(id))
                             else
                                 Toast
@@ -131,7 +137,8 @@ fun ShowCharactersList(
                             modifier = Modifier.padding(4.dp)
                         ) {
                             Text(
-                                text = title ?: "", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                                text = title ?: "", fontWeight = FontWeight.Bold, fontSize = 20.sp
+                            )
 
                         }
                     }
