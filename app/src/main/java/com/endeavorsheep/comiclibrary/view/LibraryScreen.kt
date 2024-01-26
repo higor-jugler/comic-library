@@ -50,7 +50,7 @@ fun LibraryScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(bottom = paddingValues.calculateBottomPadding()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -61,31 +61,32 @@ fun LibraryScreen(
             placeholder = { Text(text = "Character") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
-    }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            when (result) {
+                is NetworkResult.Initial -> {
+                    Text(text = "Search for a character")
+                }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        when (result) {
-            is NetworkResult.Initial -> {
-                Text(text = "Search for a character")
-            }
+                is NetworkResult.Success -> {
+                    ShowCharactersList(result, navController)
+                }
 
-            is NetworkResult.Success -> {
-                ShowCharactersList(result, navController)
-            }
+                is NetworkResult.Loading -> {
+                    CircularProgressIndicator()
+                }
 
-            is NetworkResult.Loading -> {
-                CircularProgressIndicator()
-            }
-
-            is NetworkResult.Error -> {
-                Text(text = "Error: ${result.message}")
+                is NetworkResult.Error -> {
+                    Text(text = "Error: ${result.message}")
+                }
             }
         }
     }
+
+
 }
 
 @Composable
