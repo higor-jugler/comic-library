@@ -36,5 +36,8 @@ fun CharacterImage(
         model = url,
         contentDescription = null,
         modifier = modifier,
-        contentScale = contentScale)
+        contentScale = contentScale
+    )
 }
+
+fun List<String>.comicsToString() = this.joinToString(separator = ", ")
